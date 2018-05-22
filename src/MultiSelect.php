@@ -6,98 +6,278 @@
  * Time: 20:33
  */
 
-namespace BluetreeConsole;
+namespace BlueConsole;
 
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MultiSelect
 {
-    public function __construct()
+    /**
+     * @todo add help bellow (muve up, down, space enter)
+     * @todo add separators
+     * @todo count line length and select highest value to replace all chars
+     * @todo option scroll
+     * @todo separator (---- by default, optionally message)
+     * @todo comments on array list
+     */
+    protected const CHARS = [
+        'enter' => 10,
+        'space' => 32,
+        'key_up' => 65,
+        'key_down' => 66
+    ];
+
+    protected const MOD_LINE_CHAR = "\033[1A";
+
+    /**
+     * @var string
+     */
+    protected $selectChar = '<fg=blue>❯</>';
+
+    /**
+     * @var string
+     */
+    protected $selectedChar = '<info>✓</info>';
+
+    /**
+     * @var SymfonyStyle $output
+     */
+    protected $output;
+
+    /**
+     * @var bool
+     */
+    protected $showInfo = true;
+
+    /**
+     * @var bool|resource
+     */
+    protected $stdin;
+
+    /**
+     * @param $output
+     */
+    public function __construct(SymfonyStyle $output)
     {
-        $list = [
-            'option 1',
-            'option 2',
-            'option 3',
-            'option 4',
-            'option 5',
-        ];
-        $availableChars = [10, 32, 65, 66];
-        $selectedOptions = [];
-
-
+        $this->output = $output;
+        $this->stdin = fopen('php://stdin', 'rb');
         system('stty cbreak -echo');
-        $stdin = fopen('php://stdin', 'r');
+    }
 
+    /**
+     * @param bool $showInfo
+     * @return $this
+     */
+    public function toggleShowInfo(bool $showInfo) : self
+    {
+        $this->showInfo = $showInfo;
+
+        return $this;
+    }
+
+    /**
+     * @param string $char
+     * @return $this
+     */
+    public function setSelectChar(string $char) : self
+    {
+        $this->selectChar = $char;
+
+        return $this;
+    }
+
+    /**
+     * @param string $char
+     * @return $this
+     */
+    public function setSelectedChar(string $char) : self
+    {
+        $this->selectedChar = $char;
+
+        return $this;
+    }
+
+    /**
+     * @param array $dataList
+     * @return array
+     */
+    public function renderMultiSelect(array $dataList) : array
+    {
+        $selectedOptions = [];
         $cursor = 0;
+        $listSize = \count($dataList);
 
-//echo "empty \n";
-        foreach ($list as $key => $row) {
-            $cursorChar = ' ';
-            if ($cursor === $key) {
-                $cursorChar = '❯';
-            }
-            echo " $cursorChar [ ] $row\n";
-        }
+        $this->renderBasicList($dataList);
 
+        while (true) {
+            $char = \ord(fgetc($this->stdin));
 
-        while (1) {
-            $listSize = count($list);
-
-            $c = ord(fgetc($stdin));
-            if (!in_array($c, $availableChars)) {
+            if (!\in_array($char, self::CHARS, true)) {
                 continue;
             }
 
-            if ($c === 10) {
-                echo "\nSelected:\n";
-                foreach ($list as $key => $row) {
-                    if (array_key_exists($key, $selectedOptions)) {
-                        echo "$key: $row\n";
-                    }
-                }
+            if ($char === self::CHARS['enter']) {
+                $this->renderSelectionInfo($dataList, $selectedOptions);
+
                 break;
-                exit(0);
             }
 
             for ($i = 0; $i < $listSize; $i++) {
-                echo "\033[1A";
-            }
-//        echo "\033[1A";
-
-            if ($c === 65 && $cursor > 0) {
-                $cursor--;
+                echo self::MOD_LINE_CHAR;
             }
 
-            if ($c === 66 && $cursor < $listSize -1) {
-                $cursor++;
-            }
+            [$cursor, $selectedOptions] = $this->manageCursor($cursor, $char, $listSize, $selectedOptions);
 
-            if ($c === 32) {
-                if (isset($selectedOptions[$cursor])) {
-                    unset($selectedOptions[$cursor]);
-                } else {
-                    $selectedOptions[$cursor] = true;
-                }
-            }
+            $this->renderListWithSelection($dataList, $cursor, $selectedOptions);
 
-//    echo implode(',',array_keys($selectedOptions));
-//    echo"\n";
-
-            foreach ($list as $key => $row) {
-                $cursorChar = ' ';
-                $selected = '[ ]';
-                if ($cursor === $key) {
-                    $cursorChar = '❯';
-                }
-                if (array_key_exists($key, $selectedOptions)) {
-                    $selected = '[✓]';
-                }
-                echo " $cursorChar $selected $row\n";
-            }
             sleep(.5);
         }
 
-//count line length and select highest value to replace all chars
-//option scroll
-//separator (---- by default, optionally message)
+        return $selectedOptions;
+    }
+
+    /**
+     * @param array $dataList
+     * @return null|int
+     */
+    public function renderSingleSelect(array $dataList) :? int
+    {
+        $selectedOptions = null;
+        $cursor = 0;
+        $listSize = \count($dataList);
+
+        $this->renderBasicList($dataList);
+
+        while (true) {
+            $char = \ord(fgetc($this->stdin));
+
+            if (!\in_array($char, self::CHARS, true)) {
+                continue;
+            }
+
+            if ($char === self::CHARS['enter']) {
+//                $this->renderSelectionInfo($dataList, $selectedOptions);
+
+                break;
+            }
+
+            for ($i = 0; $i < $listSize; $i++) {
+                echo self::MOD_LINE_CHAR;
+            }
+
+//            list($cursor, $selectedOptions) = $this->manageCursor($cursor, $char, $listSize, $selectedOptions);
+
+            // remove [ ]
+//            $this->renderListWithSelection($dataList, $cursor, $selectedOptions);
+
+            sleep(.5);
+        }
+
+        return $selectedOptions;
+    }
+
+    /**
+     * @param int $cursor
+     * @param int $char
+     * @param int $listSize
+     * @param array $selectedOptions
+     * @return array
+     */
+    protected function manageCursor(int $cursor, int $char, int $listSize, array $selectedOptions) : array
+    {
+        if ($cursor > 0 && $char === self::CHARS['key_up']) {
+            $cursor--;
+        }
+
+        if ($cursor < $listSize -1 && $char === self::CHARS['key_down']) {
+            $cursor++;
+        }
+
+        if ($char === self::CHARS['space']) {
+            if (isset($selectedOptions[$cursor])) {
+                unset($selectedOptions[$cursor]);
+            } else {
+                $selectedOptions[$cursor] = true;
+            }
+        }
+
+        return [$cursor, $selectedOptions];
+    }
+
+    /**
+     * @param array $dataList
+     * @param array $selectedOptions
+     * @return MultiSelect
+     */
+    protected function renderSelectionInfo(array $dataList, array $selectedOptions) : self
+    {
+        if (!$this->showInfo) {
+            return $this;
+        }
+
+        $this->output->writeln('');
+        $this->output->title('Selected:');
+
+        echo self::MOD_LINE_CHAR;
+
+        foreach ($dataList as $key => $row) {
+            if (array_key_exists($key, $selectedOptions)) {
+                $this->output->writeln("$key: <info>$row</info>");
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $dataList
+     * @param $cursor
+     * @param $selectedOptions
+     * @return MultiSelect
+     */
+    protected function renderListWithSelection(array $dataList, $cursor, $selectedOptions) : self
+    {
+        foreach ($dataList as $key => $row) {
+            $cursorChar = ' ';
+            $selected = '[ ]';
+
+            if ($cursor === $key) {
+                $cursorChar = $this->selectChar;
+            }
+
+            if (array_key_exists($key, $selectedOptions)) {
+                $selected = '[' . $this->selectedChar . ']';
+            }
+
+            // resolve colors
+            if ($cursorChar !== ' ') {
+                $row = "<fg=blue>$row</>";
+            } else {
+                $row = "<comment>$row</comment>";
+            }
+
+            $this->output->writeln(" $cursorChar $selected $row");
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $dataList
+     * @return MultiSelect
+     */
+    protected function renderBasicList(array $dataList) : self
+    {
+        foreach ($dataList as $key => $row) {
+            $cursorChar = ' ';
+
+            if ($key === 0) {
+                $cursorChar = $this->selectChar;
+            }
+
+            echo $this->output->writeln(" $cursorChar [ ] <comment>$row</comment>");
+        }
+
+        return $this;
     }
 }
