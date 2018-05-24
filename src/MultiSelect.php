@@ -13,7 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class MultiSelect
 {
     /**
-     * @todo add help bellow (muve up, down, space enter)
+     * @todo add help bellow (move up, down, space enter)
      * @todo add separators
      * @todo count line length and select highest value to replace all chars
      * @todo option scroll
@@ -245,6 +245,10 @@ class MultiSelect
                 $cursorChar = $this->selectChar;
             }
 
+            if ($cursorChar !== ' ') {
+                $selected = "<fg=blue>$selected</>";
+            }
+
             if (array_key_exists($key, $selectedOptions)) {
                 $selected = '[' . $this->selectedChar . ']';
             }
@@ -268,6 +272,8 @@ class MultiSelect
      */
     protected function renderBasicList(array $dataList) : self
     {
+        $count = 0;
+
         foreach ($dataList as $key => $row) {
             $cursorChar = ' ';
 
@@ -275,7 +281,11 @@ class MultiSelect
                 $cursorChar = $this->selectChar;
             }
 
-            echo $this->output->writeln(" $cursorChar [ ] <comment>$row</comment>");
+            if ($count++ === 0) {
+                 $this->output->writeln(" $cursorChar <fg=blue>[ ]</> <comment>$row</comment>");
+            } else {
+                $this->output->writeln(" $cursorChar [ ] <comment>$row</comment>");
+            }
         }
 
         return $this;
