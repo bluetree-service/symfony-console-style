@@ -18,3 +18,6 @@ $formatter = new FormatterHelper;
 $style = new Style($input, $output, $formatter);
 
 $style->warningMessage('Warning message');
+$style->errorMessage('Error message');
+$style->okMessage('Ok message');
+$style->infoMessage('Info message');
