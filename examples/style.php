@@ -21,3 +21,13 @@ $style->warningMessage('Warning message');
 $style->errorMessage('Error message');
 $style->okMessage('Ok message');
 $style->infoMessage('Info message');
+
+$style->error('Error');
+$style->note('Note');
+$style->warning('Warning');
+$style->caution('Caution');
+$style->success('Success');
+
+$style->genericBlock('Generic block success', 'blue', 'success', 50);
+
+$style->formatBlock(['Error 1', 'Error 2'], 'error');
