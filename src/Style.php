@@ -99,11 +99,7 @@ class Style extends SymfonyStyle
      */
     public function errorLine(array $message) : self
     {
-        $this->writeln(
-            $this->formatBlock($message, 'error')
-        );
-
-        return $this;
+        return $this->formatBlock($message, 'error');
     }
 
     /**
