@@ -31,3 +31,9 @@ $style->success('Success');
 $style->genericBlock('Generic block success', 'blue', 'success', 50);
 
 $style->formatBlock(['Error 1', 'Error 2'], 'error');
+$style->errorLine(['Error Line']);
+
+$style->formatSection('Section', 'Format Section info (default)');
+$style->formatSection('Section', 'Format Section error', 'error');
+$style->formatSection('Section', 'Format Section comment', 'comment');
+$style->formatSection('Section', 'Format Section question', 'question');
