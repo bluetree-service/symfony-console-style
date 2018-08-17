@@ -142,7 +142,7 @@ class MultiSelect
      */
     public function renderSingleSelect(array $dataList) :? int
     {
-        $selectedOptions = null;
+        $selectedOptions = [];
         $cursor = 0;
         $listSize = \count($dataList);
 
@@ -156,7 +156,7 @@ class MultiSelect
             }
 
             if ($char === self::CHARS['enter']) {
-//                $this->renderSelectionInfo($dataList, $selectedOptions);
+                $this->renderSelectionInfo($dataList, $selectedOptions);
 
                 break;
             }
@@ -165,26 +165,32 @@ class MultiSelect
                 echo self::MOD_LINE_CHAR;
             }
 
-//            list($cursor, $selectedOptions) = $this->manageCursor($cursor, $char, $listSize, $selectedOptions);
+            [$cursor, $selectedOptions] = $this->manageCursor($cursor, $char, $listSize, $selectedOptions, true);
 
-            // remove [ ]
-//            $this->renderListWithSelection($dataList, $cursor, $selectedOptions);
+            $this->renderListWithSelection($dataList, $cursor, $selectedOptions);
 
             sleep(.5);
         }
 
-        return $selectedOptions;
+        $keys = array_keys($selectedOptions);
+        return reset($keys);
     }
 
     /**
      * @param int $cursor
      * @param int $char
      * @param int $listSize
+     * @param bool $isSingleSelect
      * @param array $selectedOptions
      * @return array
      */
-    protected function manageCursor(int $cursor, int $char, int $listSize, array $selectedOptions) : array
-    {
+    protected function manageCursor(
+        int $cursor,
+        int $char,
+        int $listSize,
+        array $selectedOptions,
+        bool $isSingleSelect
+    ) : array {
         if ($cursor > 0 && $char === self::CHARS['key_up']) {
             $cursor--;
         }
@@ -194,6 +200,11 @@ class MultiSelect
         }
 
         if ($char === self::CHARS['space']) {
+            if ($isSingleSelect) {
+                $selectedOptions = [];
+                //@todo deselect of selected don't work
+            }
+
             if (isset($selectedOptions[$cursor])) {
                 unset($selectedOptions[$cursor]);
             } else {
@@ -209,7 +220,7 @@ class MultiSelect
      * @param array $selectedOptions
      * @return MultiSelect
      */
-    protected function renderSelectionInfo(array $dataList, array $selectedOptions) : self
+    protected function renderSelectionInfo(array $dataList, $selectedOptions) : self
     {
         if (!$this->showInfo) {
             return $this;
