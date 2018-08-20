@@ -189,7 +189,7 @@ class MultiSelect
         int $char,
         int $listSize,
         array $selectedOptions,
-        bool $isSingleSelect
+        bool $isSingleSelect = false
     ) : array {
         if ($cursor > 0 && $char === self::CHARS['key_up']) {
             $cursor--;
@@ -200,12 +200,9 @@ class MultiSelect
         }
 
         if ($char === self::CHARS['space']) {
-            if ($isSingleSelect) {
-                $selectedOptions = [];
-                //@todo deselect of selected don't work
-            }
+            [$selectedOptions, $oldSelections] = $this->singleSelection($isSingleSelect, $cursor, $selectedOptions);
 
-            if (isset($selectedOptions[$cursor])) {
+            if ($oldSelections || isset($selectedOptions[$cursor])) {
                 unset($selectedOptions[$cursor]);
             } else {
                 $selectedOptions[$cursor] = true;
@@ -213,6 +210,27 @@ class MultiSelect
         }
 
         return [$cursor, $selectedOptions];
+    }
+
+    /**
+     * @param bool $isSingleSelect
+     * @param int $cursor
+     * @param array $selectedOptions
+     * @return array
+     */
+    protected function singleSelection(bool $isSingleSelect, int $cursor, array $selectedOptions) : array
+    {
+        $oldSelections = false;
+
+        if ($isSingleSelect) {
+            if (isset($selectedOptions[$cursor])) {
+                $oldSelections = true;
+            }
+
+            $selectedOptions = [];
+        }
+
+        return [$selectedOptions, $oldSelections];
     }
 
     /**
