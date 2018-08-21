@@ -18,17 +18,14 @@ $output = new ConsoleOutput;
 
 $multiSelect = new MultiSelect(new SymfonyStyle($input, $output));
 
-//$list = [
-//    ['first', 'second', 'last'],
-//    [1, 2, 3, 4, 5],
-//    ['a', 'b'],
-//    [true, false, null],
-//];
 $list = ['first', 'second', 'last'];
+$output->writeln('Data list:');
 
-//$multiSelect->renderMultiSelect($list);
+dump($list);
+$output->writeln('');
 
-$val = $multiSelect->renderSingleSelect($list);
+$val = $multiSelect->renderMultiSelect($list);
+
+$output->writeln('');
+$output->writeln('Method output:');
 dump($val);
-
-//nested list support??
