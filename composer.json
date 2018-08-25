@@ -16,7 +16,8 @@
     },
     "require-dev": {
         "satooshi/php-coveralls": "1.0.*",
-        "phpunit/phpunit": "4.8.35"
+        "phpunit/phpunit": "4.8.35",
+        "symfony/var-dumper": "^4.1"
     },
     "autoload": {
         "psr-4": {
