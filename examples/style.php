@@ -37,3 +37,10 @@ $style->formatSection('Section', 'Format Section info (default)');
 $style->formatSection('Section', 'Format Section error', 'error');
 $style->formatSection('Section', 'Format Section comment', 'comment');
 $style->formatSection('Section', 'Format Section question', 'question');
+
+$style->setAlign(5);
+$style->infoMessage('Alignment 5');
+$style->setAlign(10);
+$style->okMessage('Alignment 10');
+$style->setAlign(15);
+$style->warningMessage('Alignment 15');
