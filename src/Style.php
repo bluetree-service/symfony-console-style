@@ -269,4 +269,54 @@ class Style extends SymfonyStyle
 
         return $this;
     }
+
+    /**
+     * @param string $message
+     * @param int $length
+     * @param string $suffix
+     * @return Style
+     */
+    public function truncate(string $message, int $length, string $suffix = '...') : self
+    {
+        $this->write($this->truncateMessage($message, $length, $suffix));
+
+        return $this;
+    }
+
+    /**
+     * @param string $message
+     * @param int $length
+     * @param string $suffix
+     * @return Style
+     */
+    public function truncateln(string $message, int $length, string $suffix = '...') : self
+    {
+        $this->writeln($this->truncateMessage($message, $length, $suffix));
+
+        return $this;
+    }
+
+    /**
+     * @param string $message
+     * @param int $length
+     * @param string $suffix
+     * @return string
+     */
+    public function truncateMessage(string $message, int $length, string $suffix = '...') : string
+    {
+        return $this->formatter->truncate($message, $length, $suffix);
+    }
+    
+    /**
+     * [  OK  ]
+     * [FAILED]
+     * [ WARN ]
+     * [ INFO ]
+     * [ ***  ]
+     */
+
+    /*
+        http://symfony.com/doc/current/components/console/helpers/formatterhelper.html
+        https://symfony.com/doc/current/console/style.html
+    */
 }
