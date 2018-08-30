@@ -44,3 +44,9 @@ $style->setAlign(10);
 $style->okMessage('Alignment 10');
 $style->setAlign(15);
 $style->warningMessage('Alignment 15');
+
+$message = 'This is a very long message, which should be truncated';
+$style->truncateln($message, 7);
+$style->truncateln($message, -5);
+$style->truncateln($message, 7, '!!');
+$style->truncateln('Short', 10);
