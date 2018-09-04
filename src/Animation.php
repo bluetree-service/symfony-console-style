@@ -55,7 +55,23 @@ class Animation
 
     public function setWaitTime(\DateInterval $dateInterval)
     {
-        
+        //        $interval = new \DateInterval('PT10S');
+        $dateInterval->invert = true;
+        //dump($interval);
+
+        $d1 = new \DateTime();
+        while (true) {
+            $d2 = new \DateTime();
+            $d2->add($dateInterval);
+
+            $iv = $d2->diff($d1);
+            dump($iv->s);
+            if ($iv->s === 0) {
+                echo "end\n";
+                exit(0);
+            }
+            sleep(1);
+        }
     }
 
     public function setMessage(string $message)
