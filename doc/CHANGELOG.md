@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.3.0.1 - 2018-10-31
+### Changed
+* Symfony console required version changed from 4.* to ~4.0
+
 ## 0.3.0.0 - 2018-10-23
 ### Added
 * Some example files (./examples)
