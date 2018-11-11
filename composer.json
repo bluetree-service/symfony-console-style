@@ -3,7 +3,7 @@
     "description": "Extends symfony console display style",
     "type": "library",
     "license": "MIT",
-    "version": "0.3.0.2",
+    "version": "0.3.0.3",
     "authors": [
         {
             "name": "Michał Adamiak",
@@ -17,7 +17,8 @@
     "require-dev": {
         "satooshi/php-coveralls": "1.0.*",
         "phpunit/phpunit": "4.8.35",
-        "symfony/var-dumper": "^4.1"
+        "symfony/var-dumper": "^4.1",
+        "bluetree-service/clover-reporter": "~0.1"
     },
     "autoload": {
         "psr-4": {
@@ -28,5 +29,12 @@
         "psr-4": {
             "BlueConsoleTest\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "phpunit --coverage-clover build/logs/clover.xml",
+        "test-cover": [
+            "@test",
+            "./vendor/bin/clover_reporter -s --ansi"
+        ]
     }
 }
