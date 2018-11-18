@@ -255,6 +255,7 @@ class Style extends SymfonyStyle
      * @param int $length
      * @return $this
      * @throws \InvalidArgumentException
+     * @todo if type ==='' don't display []
      */
     public function genericBlock($message, $background, $type, $length = 100) : self
     {
@@ -308,6 +309,9 @@ class Style extends SymfonyStyle
     }
     
     /**
+     * @todo add multi line block
+     * @todo add php 7.1 features
+     * @todo
      * [  OK  ]
      * [FAILED]
      * [ WARN ]
