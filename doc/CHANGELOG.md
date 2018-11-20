@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.3.0.4 - 2018-11-
+### Added
+* Some new tests
+
 ## 0.3.0.3 - 2018-11-11
 ### Added
 * Clover reporter as dev dependency
