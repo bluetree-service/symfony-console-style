@@ -1,9 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## 0.3.0.4 - 2018-11-
+## 0.3.0.4 - 2018-12-18
 ### Added
 * Some new tests
+* Some todo in `src/Style.php`
+* New examples
+* Coverage composer script
 
 ## 0.3.0.3 - 2018-11-11
 ### Added
