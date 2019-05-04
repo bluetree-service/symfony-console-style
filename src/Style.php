@@ -19,7 +19,7 @@ class Style extends SymfonyStyle
     /**
      * @var int
      */
-    protected $align = 10;
+    protected $align = 12;
 
     /**
      * @var int
@@ -49,7 +49,7 @@ class Style extends SymfonyStyle
 
         parent::__construct($input, $output);
 
-        $this->setStartTime();
+        $this->startTime();
     }
 
     /**
@@ -71,7 +71,7 @@ class Style extends SymfonyStyle
     /**
      * @param int|null $time
      */
-    public function setStartTime(?int $time = null): void
+    public function startTime(?int $time = null): void
     {
         if (!$time) {
             $time = \microtime(true);
@@ -102,7 +102,7 @@ class Style extends SymfonyStyle
             $this->timeCharLength -= \strlen($days);
         }
 
-        $formatted = \sprintf("% {$this->timeCharLength}.4f", $calc);
+        $formatted = \sprintf("%0{$this->timeCharLength}.4f", $calc);
 
         return "[ <options=bold>$days$formatted</> ]";
     }
@@ -238,13 +238,7 @@ class Style extends SymfonyStyle
      */
     public function okMessage($message) : self
     {
-        //align with timer
-        $alignment = $this->align(8, $this->align);
-        $this->write('[  <info>OK</info>  ]');
-        $this->write($alignment);
-        $this->writeln($message);
-
-        return $this;
+        return $this->renderBlock('  <info>OK</info>  ', $message);
     }
 
     /**
@@ -254,12 +248,7 @@ class Style extends SymfonyStyle
      */
     public function errorMessage($message) : self
     {
-        $alignment = $this->align(8, $this->align);
-        $this->write('[ <fg=red>FAIL</> ]');
-        $this->write($alignment);
-        $this->writeln($message);
-
-        return $this;
+        return $this->renderBlock(' <fg=red>FAIL</> ', $message);
     }
 
     /**
@@ -269,12 +258,7 @@ class Style extends SymfonyStyle
      */
     public function warningMessage(string $message) : self
     {
-        $alignment = $this->align(8, $this->align);
-        $this->write('[ <comment>WARN</comment> ]');
-        $this->write($alignment);
-        $this->writeln($message);
-
-        return $this;
+        return $this->renderBlock(' <comment>WARN</comment> ', $message);
     }
 
     /**
@@ -284,8 +268,20 @@ class Style extends SymfonyStyle
      */
     public function infoMessage(string $message) : self
     {
+        return $this->renderBlock(' <fg=blue>INFO</> ', $message);
+    }
+
+    /**
+     * @param string $block
+     * @param string $message
+     * @return Style
+     */
+    protected function renderBlock(string $block, string $message): self
+    {
+        $timer = $this->getTimer(true);
         $alignment = $this->align(8, $this->align);
-        $this->write('[ <fg=blue>INFO</> ]');
+
+        $this->write("[$block]$timer");
         $this->write($alignment);
         $this->writeln($message);
 
