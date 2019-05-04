@@ -9,6 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Style extends SymfonyStyle
 {
+    protected const DAY_SECCONDS = 86400;
+
     /**
      * @var \Symfony\Component\Console\Helper\FormatterHelper
      */
@@ -17,7 +19,22 @@ class Style extends SymfonyStyle
     /**
      * @var int
      */
-    protected $align = 20;
+    protected $align = 10;
+
+    /**
+     * @var int
+     */
+    protected $timeCharLength = 14;
+
+    /**
+     * @var int
+     */
+    protected $time;
+
+    /**
+     * @var bool
+     */
+    protected $showTimer = false;
 
     /**
      * Style constructor.
@@ -31,6 +48,78 @@ class Style extends SymfonyStyle
         $this->formatter = $formatter;
 
         parent::__construct($input, $output);
+
+        $this->setStartTime();
+    }
+
+    /**
+     * Turn o/off show timer after info block
+     */
+    public function toggleShowTimer(): void
+    {
+        $this->showTimer = !$this->showTimer;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTimerOn(): bool
+    {
+        return $this->showTimer;
+    }
+
+    /**
+     * @param int|null $time
+     */
+    public function setStartTime(?int $time = null): void
+    {
+        if (!$time) {
+            $time = \microtime(true);
+        }
+
+        $this->time = $time;
+    }
+
+    /**
+     * @param bool $checkEnableForBlock
+     * @return string|null
+     */
+    protected function getTimer(bool $checkEnableForBlock = false):? string
+    {
+        if ($checkEnableForBlock && !$this->showTimer) {
+            return null;
+        }
+
+        $days = null;
+        $current = \microtime(true);
+        $calc = $current - $this->time;
+
+        if ($calc > self::DAY_SECCONDS) {
+            $days = \round($calc / self::DAY_SECCONDS);
+            $calc -= self::DAY_SECCONDS * $days;
+            $days .= 'd ';
+
+            $this->timeCharLength -= \strlen($days);
+        }
+
+        $formatted = \sprintf("% {$this->timeCharLength}.4f", $calc);
+
+        return "[ <options=bold>$days$formatted</> ]";
+    }
+
+    /**
+     * @param bool $newLine
+     * @return Style
+     */
+    public function timer(bool $newLine = true): self
+    {
+        $this->write($this->getTimer());
+
+        if ($newLine) {
+            $this->newLine();
+        }
+
+        return $this;
     }
 
     /**
@@ -50,6 +139,25 @@ class Style extends SymfonyStyle
     public function getAlign() : int
     {
         return $this->align;
+    }
+
+    /**
+     * @param int $align
+     * @return $this
+     */
+    public function setTimeCharLength($align) : self
+    {
+        $this->timeCharLength = $align;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeCharLength() : int
+    {
+        return $this->timeCharLength;
     }
 
     /**
@@ -130,8 +238,9 @@ class Style extends SymfonyStyle
      */
     public function okMessage($message) : self
     {
-        $alignment = $this->align(4, $this->align);
-        $this->write('<info>[OK]</info>');
+        //align with timer
+        $alignment = $this->align(8, $this->align);
+        $this->write('[  <info>OK</info>  ]');
         $this->write($alignment);
         $this->writeln($message);
 
@@ -145,8 +254,8 @@ class Style extends SymfonyStyle
      */
     public function errorMessage($message) : self
     {
-        $alignment = $this->align(7, $this->align);
-        $this->write('<fg=red>[ERROR]</>');
+        $alignment = $this->align(8, $this->align);
+        $this->write('[ <fg=red>FAIL</> ]');
         $this->write($alignment);
         $this->writeln($message);
 
@@ -160,8 +269,8 @@ class Style extends SymfonyStyle
      */
     public function warningMessage(string $message) : self
     {
-        $alignment = $this->align(9, $this->align);
-        $this->write('<comment>[WARNING]</comment>');
+        $alignment = $this->align(8, $this->align);
+        $this->write('[ <comment>WARN</comment> ]');
         $this->write($alignment);
         $this->writeln($message);
 
@@ -175,8 +284,8 @@ class Style extends SymfonyStyle
      */
     public function infoMessage(string $message) : self
     {
-        $alignment = $this->align(6, $this->align);
-        $this->write('<fg=blue>[INFO]</>');
+        $alignment = $this->align(8, $this->align);
+        $this->write('[ <fg=blue>INFO</> ]');
         $this->write($alignment);
         $this->writeln($message);
 
@@ -312,10 +421,6 @@ class Style extends SymfonyStyle
      * @todo add multi line block
      * @todo add php 7.1 features
      * @todo
-     * [  OK  ]
-     * [FAILED]
-     * [ WARN ]
-     * [ INFO ]
      * [ ***  ]
      */
 
