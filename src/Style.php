@@ -32,10 +32,12 @@ class Style extends SymfonyStyle
      * @throws \InvalidArgumentException
      * @return $this
      */
-    public function formatSection($section, $message, $style = 'info') : self
+    public function formatSection(string $section, string $message, string $style = 'info') : self
     {
+        $timer = $this->getTimer(true);
+
         $this->writeln(
-            $this->formatter->formatSection(
+            $timer . $this->formatter->formatSection(
                 $section,
                 $message,
                 $style
@@ -52,15 +54,23 @@ class Style extends SymfonyStyle
      * @throws \InvalidArgumentException
      * @return $this
      */
-    public function formatBlock($messages, $style, $large = false) : self
+    public function formatBlock($messages, string $style, $large = false) : self
     {
-        $this->writeln(
-            $this->formatter->formatBlock(
-                $messages,
-                $style,
-                $large
-            )
-        );
+        $timer = $this->getTimer(true);
+
+        if (!\is_array($messages)) {
+            $messages = [$messages];
+        }
+
+        foreach ($messages as $message) {
+            $this->writeln(
+                $timer . $this->formatter->formatBlock(
+                    $message,
+                    $style,
+                    $large
+                )
+            );
+        }
 
         return $this;
     }
@@ -80,7 +90,7 @@ class Style extends SymfonyStyle
      * @return $this
      * @throws \InvalidArgumentException
      */
-    public function okMessage($message) : self
+    public function okMessage(string $message) : self
     {
         return $this->renderBlock('  <info>OK</info>  ', $message);
     }
@@ -90,7 +100,7 @@ class Style extends SymfonyStyle
      * @return $this
      * @throws \InvalidArgumentException
      */
-    public function errorMessage($message) : self
+    public function errorMessage(string $message) : self
     {
         return $this->renderBlock(' <fg=red>FAIL</> ', $message);
     }
@@ -125,7 +135,7 @@ class Style extends SymfonyStyle
         $timer = $this->getTimer(true);
         $alignment = $this->align(8, $this->align);
 
-        $this->write("[$block]$timer");
+        $this->write("{$timer}[$block]");
         $this->write($alignment);
         $this->writeln($message);
 
@@ -206,12 +216,14 @@ class Style extends SymfonyStyle
      * @throws \InvalidArgumentException
      * @todo if type ==='' don't display []
      */
-    public function genericBlock($message, $background, $type, $length = 100) : self
+    public function genericBlock(string $message, string $background, string $type, int $length = 100) : self
     {
         $type = strtoupper($type);
         $alignment = $this->align(0, $length);
         $alignmentMessage = $this->align($message, $length - (mb_strlen($type) + 5));
+        $timer = $this->getTimer(true);
 
+        $timer ? $this->writeln($timer) : null;
         $this->writeln("<bg=$background>$alignment</>");
         $this->writeln("<fg=white;bg=$background>  [$type] $message$alignmentMessage</>");
         $this->writeln("<bg=$background>$alignment</>");
