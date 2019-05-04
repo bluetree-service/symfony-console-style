@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.4.0.0 - 2019-05-04
+### Added
+* Message timer
+### Changed
+* Some block styles
+* Split `Style` class
+
 ## 0.3.0.4 - 2018-12-18
 ### Added
 * Some new tests
