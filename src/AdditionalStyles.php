@@ -34,7 +34,12 @@ trait AdditionalStyles
     protected $showTimer = false;
 
     /**
-     * @var \Symfony\Component\Console\Helper\FormatterHelper
+     * @var bool
+     */
+    protected $timerTypeDateTime = false;
+
+    /**
+     * @var FormatterHelper
      */
     protected $formatter;
 
@@ -100,6 +105,14 @@ trait AdditionalStyles
     }
 
     /**
+     * Turn o/off show timer after info block
+     */
+    public function toggleTimerType(): void
+    {
+        $this->timerTypeDateTime = !$this->timerTypeDateTime;
+    }
+
+    /**
      * @return bool
      */
     public function isTimerOn(): bool
@@ -122,6 +135,7 @@ trait AdditionalStyles
     /**
      * @param bool $checkEnableForBlock
      * @return string|null
+     * @throws \Exception
      */
     protected function getTimer(bool $checkEnableForBlock = false):? string
     {
@@ -129,6 +143,27 @@ trait AdditionalStyles
             return null;
         }
 
+        if ($this->timerTypeDateTime) {
+            return $this->getTimerDateTime();
+        }
+
+        return $this->getTimerDefault();
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    protected function getTimerDateTime(): string
+    {
+        return (new \DateTime)->format('%c');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTimerDefault(): string
+    {
         $days = null;
         $current = \microtime(true);
         $calc = $current - $this->time;
