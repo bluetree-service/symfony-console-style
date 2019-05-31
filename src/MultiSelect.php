@@ -19,6 +19,7 @@ class MultiSelect
      * @todo option scroll
      * @todo separator (---- by default, optionally message)
      * @todo comments on array list
+     * @todo use different select char & brackets for single select
      */
     protected const CHARS = [
         'enter' => 10,
@@ -250,7 +251,7 @@ class MultiSelect
         echo self::MOD_LINE_CHAR;
 
         foreach ($dataList as $key => $row) {
-            if (array_key_exists($key, $selectedOptions)) {
+            if (\array_key_exists($key, $selectedOptions)) {
                 $this->output->writeln("$key: <info>$row</info>");
             }
         }
@@ -278,11 +279,11 @@ class MultiSelect
                 $selected = "<fg=blue>$selected</>";
             }
 
-            if (array_key_exists($key, $selectedOptions)) {
+            if (\array_key_exists($key, $selectedOptions)) {
                 $selected = '[' . $this->selectedChar . ']';
             }
 
-            // resolve colors
+            //@todo resolve colors
             if ($cursorChar !== ' ') {
                 $row = "<fg=blue>$row</>";
             } else {
