@@ -13,6 +13,7 @@ class Style extends SymfonyStyle
     /**
      * @param bool $newLine
      * @return Style
+     * @throws \Exception
      */
     public function timer(bool $newLine = true): self
     {
@@ -29,8 +30,9 @@ class Style extends SymfonyStyle
      * @param string $section
      * @param string $message
      * @param string $style
-     * @throws \InvalidArgumentException
      * @return $this
+     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function formatSection(string $section, string $message, string $style = 'info') : self
     {
@@ -51,8 +53,9 @@ class Style extends SymfonyStyle
      * @param string|array $messages
      * @param string $style
      * @param bool $large
-     * @throws \InvalidArgumentException
      * @return $this
+     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function formatBlock($messages, string $style, $large = false) : self
     {
@@ -77,8 +80,9 @@ class Style extends SymfonyStyle
 
     /**
      * @param array $message
-     * @throws \InvalidArgumentException
      * @return $this
+     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function errorLine(array $message) : self
     {
@@ -89,6 +93,7 @@ class Style extends SymfonyStyle
      * @param $message
      * @return $this
      * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function okMessage(string $message) : self
     {
@@ -99,6 +104,7 @@ class Style extends SymfonyStyle
      * @param $message
      * @return $this
      * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function errorMessage(string $message) : self
     {
@@ -109,6 +115,7 @@ class Style extends SymfonyStyle
      * @param string $message
      * @return $this
      * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function warningMessage(string $message) : self
     {
@@ -119,6 +126,7 @@ class Style extends SymfonyStyle
      * @param string $message
      * @return $this
      * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function infoMessage(string $message) : self
     {
@@ -129,8 +137,9 @@ class Style extends SymfonyStyle
      * @param string $block
      * @param string $message
      * @return Style
+     * @throws \Exception
      */
-    protected function renderBlock(string $block, string $message): self
+    public function renderBlock(string $block, string $message): self
     {
         $timer = $this->getTimer(true);
         $alignment = $this->align(8, $this->align);
@@ -161,6 +170,7 @@ class Style extends SymfonyStyle
      * @param string $message
      * @return $this
      * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function note($message) : self
     {
@@ -171,6 +181,7 @@ class Style extends SymfonyStyle
      * @param string $message
      * @return $this
      * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function caution($message) : self
     {
@@ -181,6 +192,7 @@ class Style extends SymfonyStyle
      * @param string $message
      * @return $this
      * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function success($message) : self
     {
@@ -191,6 +203,7 @@ class Style extends SymfonyStyle
      * @param string $message
      * @return $this
      * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function warning($message) : self
     {
@@ -201,6 +214,7 @@ class Style extends SymfonyStyle
      * @param string $message
      * @return $this
      * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function error($message) : self
     {
@@ -214,6 +228,7 @@ class Style extends SymfonyStyle
      * @param int $length
      * @return $this
      * @throws \InvalidArgumentException
+     * @throws \Exception
      * @todo if type ==='' don't display []
      */
     public function genericBlock(string $message, string $background, string $type, int $length = 100) : self
@@ -235,6 +250,7 @@ class Style extends SymfonyStyle
     /**
      * @todo add multi line block
      * @todo add php 7.1 features
+     * @todo override all methods to add timer
      * @todo
      * [ ***  ]
      */

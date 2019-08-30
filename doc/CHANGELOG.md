@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.5.0.0 - 
+### Added
+* Message timer with date time
+### Changed
+* Style::renderBlock make public
+
 ## 0.4.0.0 - 2019-05-04
 ### Added
 * Message timer

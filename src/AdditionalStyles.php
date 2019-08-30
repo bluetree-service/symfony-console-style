@@ -1,12 +1,7 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: chajr
- * Date: 2019-05-04
- * Time: 10:15
- */
 
 namespace BlueConsole;
+
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,6 +37,11 @@ trait AdditionalStyles
      * @var FormatterHelper
      */
     protected $formatter;
+
+    /**
+     * @var string
+     */
+    protected $dateTimeFormat = '%c';
 
     /**
      * Style constructor.
@@ -156,7 +156,24 @@ trait AdditionalStyles
      */
     protected function getTimerDateTime(): string
     {
-        return (new \DateTime)->format('%c');
+        return (new \DateTime)->format($this->dateTimeFormat);
+    }
+
+    /**
+     * @return string
+     */
+    public function getDateTimeFormat(): string
+    {
+        return $this->dateTimeFormat;
+    }
+
+    /**
+     * @param string $format
+     * @return void
+     */
+    public function setDateTimeFormat(string $format): void
+    {
+        $this->dateTimeFormat = $format;
     }
 
     /**
@@ -220,15 +237,19 @@ trait AdditionalStyles
     }
 
     /**
-     * @param string|int $strLength
+     * @param mixed $string
      * @param int $align
      * @return string
      */
-    public function align($strLength, $align) : string
+    public function align($string, $align) : string
     {
-        if (\is_string($strLength)) {
-            $strLength = mb_strlen($strLength);
+        $strLength = $string;
+
+        if (\is_string($string)) {
+            $strLength = mb_strlen($string);
         }
+
+        //@todo add support if string is an array, or object
 
         $newAlign = ' ';
         $spaces = $align - $strLength;
