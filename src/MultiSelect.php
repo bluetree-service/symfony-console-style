@@ -28,7 +28,7 @@ class MultiSelect
         'key_down' => 66
     ];
 
-    protected const MOD_LINE_CHAR = "\033[1A";
+    public const MOD_LINE_CHAR = "\033[1A";
 
     /**
      * @var string

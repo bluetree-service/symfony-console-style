@@ -90,3 +90,13 @@ $style->setAlign(10);
 $style->okMessage('Alignment 10');
 $style->setAlign(15);
 $style->warningMessage('Alignment 15');
+
+//display datetime
+$style->newLine(4);
+
+$style->toggleTimerType();
+
+$style->warningMessage('Warning message with timer');
+$style->errorMessage('Error message with timer');
+$style->okMessage('Ok message with timer');
+$style->infoMessage('Info message with timer');

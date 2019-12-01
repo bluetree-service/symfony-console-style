@@ -35,18 +35,18 @@ class StyleTest extends TestCase
     public function testErrorMessage(): void
     {
         $this->style->errorMessage('Error message');
-        $this->assertEquals($this->getDisplay(), "[ERROR]              Error message\n");
+        $this->assertEquals($this->getDisplay(), "[ FAIL ]     Error message\n");
     }
 
     public function testOkMessage(): void
     {
         $this->style->okMessage('Ok message');
-        $this->assertEquals($this->getDisplay(), "[OK]                 Ok message\n");
+        $this->assertEquals($this->getDisplay(), "[  OK  ]     Ok message\n");
     }
 
     public function testInfoMessage(): void
     {
         $this->style->infoMessage('Info message');
-        $this->assertEquals($this->getDisplay(), "[INFO]               Info message\n");
+        $this->assertEquals($this->getDisplay(), "[ INFO ]     Info message\n");
     }
 }

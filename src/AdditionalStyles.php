@@ -41,7 +41,7 @@ trait AdditionalStyles
     /**
      * @var string
      */
-    protected $dateTimeFormat = '%c';
+    protected $dateTimeFormat = 'c';
 
     /**
      * Style constructor.
@@ -156,7 +156,9 @@ trait AdditionalStyles
      */
     protected function getTimerDateTime(): string
     {
-        return (new \DateTime)->format($this->dateTimeFormat);
+        $dateTime = (new \DateTime)->format($this->dateTimeFormat);
+
+        return "[ <options=bold>$dateTime</> ]";
     }
 
     /**
