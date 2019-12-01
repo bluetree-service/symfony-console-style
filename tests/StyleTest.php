@@ -29,7 +29,7 @@ class StyleTest extends TestCase
     public function testWarningMessage(): void
     {
         $this->style->warningMessage('Warning message');
-        $this->assertEquals($this->getDisplay(), "[WARNING]            Warning message\n");
+        $this->assertEquals($this->getDisplay(), "[ WARN ]     Warning message\n");
     }
 
     public function testErrorMessage(): void
