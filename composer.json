@@ -16,9 +16,9 @@
     },
     "require-dev": {
         "satooshi/php-coveralls": "1.0.*",
-        "phpunit/phpunit": "4.8.35",
         "symfony/var-dumper": "^4.1",
-        "bluetree-service/clover-reporter": "~0.1"
+        "bluetree-service/clover-reporter": "~0.1",
+        "phpunit/phpunit": "^8.4"
     },
     "autoload": {
         "psr-4": {
