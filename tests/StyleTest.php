@@ -26,27 +26,18 @@ class StyleTest extends TestCase
         $this->style = new Style($input, $this->output, $formatter);
     }
 
-    public function testWarningMessage(): void
+    public function testTimer(): void
     {
-        $this->style->warningMessage('Warning message');
-        $this->assertEquals($this->getDisplay(), "[ WARN ]     Warning message\n");
+        $this->style->timer();
+        $this->assertRegExp('/\[ 000000000.00[\d]{2} \]/', $this->getDisplay());
+
+        $this->style->timer(true);
+        $this->assertRegExp('/\[ 000000000.00[\d]{2} \]\n/', $this->getDisplay());
     }
 
-    public function testErrorMessage(): void
+    public function testFormatSection(): void
     {
-        $this->style->errorMessage('Error message');
-        $this->assertEquals($this->getDisplay(), "[ FAIL ]     Error message\n");
-    }
-
-    public function testOkMessage(): void
-    {
-        $this->style->okMessage('Ok message');
-        $this->assertEquals($this->getDisplay(), "[  OK  ]     Ok message\n");
-    }
-
-    public function testInfoMessage(): void
-    {
-        $this->style->infoMessage('Info message');
-        $this->assertEquals($this->getDisplay(), "[ INFO ]     Info message\n");
+        $this->style->formatSection('Section', 'Format Section info (default)');
+        $this->assertEquals("[Section] Format Section info (default)\n", $this->getDisplay());
     }
 }

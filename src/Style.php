@@ -34,7 +34,7 @@ class Style extends SymfonyStyle
      * @throws \Exception
      * @throws \InvalidArgumentException
      */
-    public function formatSection(string $section, string $message, string $style = 'info') : self
+    public function formatSection(string $section, string $message, string $style = 'info'): self
     {
         $timer = $this->getTimer(true);
 
@@ -57,7 +57,7 @@ class Style extends SymfonyStyle
      * @throws \Exception
      * @throws \InvalidArgumentException
      */
-    public function formatBlock($messages, string $style, $large = false) : self
+    public function formatBlock($messages, string $style, bool $large = false): self
     {
         $timer = $this->getTimer(true);
 

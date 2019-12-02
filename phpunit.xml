@@ -3,6 +3,7 @@
     <testsuites>
         <testsuite name="style">
             <directory>tests/StyleTest.php</directory>
+            <directory>tests/StyleMessageTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>
