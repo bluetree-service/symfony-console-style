@@ -8,7 +8,7 @@ class Style extends SymfonyStyle
 {
     use AdditionalStyles;
 
-    const DAY_SECCONDS = 86400;
+    public const DAY_SECCONDS = 86400;
 
     /**
      * @param bool $newLine
@@ -84,7 +84,7 @@ class Style extends SymfonyStyle
      * @throws \Exception
      * @throws \InvalidArgumentException
      */
-    public function errorLine(array $message) : self
+    public function errorLine(array $message): self
     {
         return $this->formatBlock($message, 'error');
     }
@@ -95,7 +95,7 @@ class Style extends SymfonyStyle
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function okMessage(string $message) : self
+    public function okMessage(string $message): self
     {
         return $this->renderBlock('  <info>OK</info>  ', $message);
     }
@@ -106,7 +106,7 @@ class Style extends SymfonyStyle
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function errorMessage(string $message) : self
+    public function errorMessage(string $message): self
     {
         return $this->renderBlock(' <fg=red>FAIL</> ', $message);
     }
@@ -117,7 +117,7 @@ class Style extends SymfonyStyle
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function warningMessage(string $message) : self
+    public function warningMessage(string $message): self
     {
         return $this->renderBlock(' <comment>WARN</comment> ', $message);
     }
@@ -128,7 +128,7 @@ class Style extends SymfonyStyle
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function infoMessage(string $message) : self
+    public function infoMessage(string $message): self
     {
         return $this->renderBlock(' <fg=blue>INFO</> ', $message);
     }
@@ -151,28 +151,13 @@ class Style extends SymfonyStyle
         return $this;
     }
 
-    public function message($message, $color, $label) : self
-    {
-        if ($color) {
-
-        }
-
-        if ($label) {
-
-        }
-
-        $this->writeln($message);
-
-        return $this;
-    }
-
     /**
      * @param string $message
      * @return $this
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function note($message) : self
+    public function note($message): self
     {
         return $this->genericBlock($message, 'blue', 'note');
     }
@@ -183,7 +168,7 @@ class Style extends SymfonyStyle
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function caution($message) : self
+    public function caution($message): self
     {
         return $this->genericBlock($message, 'magenta', 'caution');
     }
@@ -194,7 +179,7 @@ class Style extends SymfonyStyle
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function success($message) : self
+    public function success($message): self
     {
         return $this->genericBlock($message, 'green', 'success');
     }
@@ -205,7 +190,7 @@ class Style extends SymfonyStyle
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function warning($message) : self
+    public function warning($message): self
     {
         return $this->genericBlock($message, 'yellow', 'warning');
     }
@@ -216,7 +201,7 @@ class Style extends SymfonyStyle
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function error($message) : self
+    public function error($message): self
     {
         return $this->genericBlock($message, 'red', 'error');
     }
@@ -224,18 +209,21 @@ class Style extends SymfonyStyle
     /**
      * @param string $message
      * @param string $background
-     * @param string $type
+     * @param string|null $type
      * @param int $length
      * @return $this
      * @throws \InvalidArgumentException
      * @throws \Exception
-     * @todo if type ==='' don't display []
      */
-    public function genericBlock(string $message, string $background, string $type, int $length = 100) : self
+    public function genericBlock(string $message, string $background, ?string $type, int $length = 100): self
     {
-        $type = strtoupper($type);
+        if (\trim($type) === '') {
+            return $this;
+        }
+
+        $type = \strtoupper($type);
         $alignment = $this->align(0, $length);
-        $alignmentMessage = $this->align($message, $length - (mb_strlen($type) + 5));
+        $alignmentMessage = $this->align($message, $length - (\mb_strlen($type) + 5));
         $timer = $this->getTimer(true);
 
         $timer ? $this->writeln($timer) : null;
@@ -247,12 +235,13 @@ class Style extends SymfonyStyle
         return $this;
     }
 
+    public function longRunCommand(string $command): void
+    {
+        //[ ***  ]
+    }
+
     /**
      * @todo add multi line block
-     * @todo add php 7.1 features
-     * @todo override all methods to add timer
-     * @todo
-     * [ ***  ]
      */
 
     /*
