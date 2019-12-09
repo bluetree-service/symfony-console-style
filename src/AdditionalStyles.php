@@ -248,6 +248,10 @@ trait AdditionalStyles
         $strLength = 0;
 
         switch (true) {
+            case \is_numeric($string):
+                $strLength = $string;
+                break;
+
             case \is_string($string) || \is_object($string):
                 $strLength = \mb_strlen((string)$string);
                 break;
