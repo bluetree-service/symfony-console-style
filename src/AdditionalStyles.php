@@ -65,7 +65,7 @@ trait AdditionalStyles
      * @param string $suffix
      * @return Style
      */
-    public function truncate(string $message, int $length, string $suffix = '...') : self
+    public function truncate(string $message, int $length, string $suffix = '...'): self
     {
         $this->write($this->truncateMessage($message, $length, $suffix));
 
@@ -78,7 +78,7 @@ trait AdditionalStyles
      * @param string $suffix
      * @return Style
      */
-    public function truncateLn(string $message, int $length, string $suffix = '...') : self
+    public function truncateLn(string $message, int $length, string $suffix = '...'): self
     {
         $this->writeln($this->truncateMessage($message, $length, $suffix));
 
@@ -91,7 +91,7 @@ trait AdditionalStyles
      * @param string $suffix
      * @return string
      */
-    public function truncateMessage(string $message, int $length, string $suffix = '...') : string
+    public function truncateMessage(string $message, int $length, string $suffix = '...'): string
     {
         return $this->formatter->truncate($message, $length, $suffix);
     }
@@ -204,7 +204,7 @@ trait AdditionalStyles
      * @param int $align
      * @return $this
      */
-    public function setAlign($align) : self
+    public function setAlign($align): self
     {
         $this->align = $align;
 
@@ -214,7 +214,7 @@ trait AdditionalStyles
     /**
      * @return int
      */
-    public function getAlign() : int
+    public function getAlign(): int
     {
         return $this->align;
     }
@@ -223,7 +223,7 @@ trait AdditionalStyles
      * @param int $align
      * @return $this
      */
-    public function setTimeCharLength($align) : self
+    public function setTimeCharLength($align): self
     {
         $this->timeCharLength = $align;
 
@@ -233,7 +233,7 @@ trait AdditionalStyles
     /**
      * @return int
      */
-    public function getTimeCharLength() : int
+    public function getTimeCharLength(): int
     {
         return $this->timeCharLength;
     }
@@ -243,15 +243,24 @@ trait AdditionalStyles
      * @param int $align
      * @return string
      */
-    public function align($string, $align) : string
+    public function align($string, $align): string
     {
-        $strLength = $string;
+        $strLength = 0;
 
-        if (\is_string($string)) {
-            $strLength = mb_strlen($string);
+        switch (true) {
+            case \is_string($string) || \is_object($string):
+                $strLength = \mb_strlen((string)$string);
+                break;
+
+            case \is_array($string):
+                foreach ($string as $message) {
+                    $strLength += \mb_strlen($message);
+                }
+                break;
+
+            default:
+                break;
         }
-
-        //@todo add support if string is an array, or object
 
         $newAlign = ' ';
         $spaces = $align - $strLength;
