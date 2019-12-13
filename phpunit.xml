@@ -4,6 +4,7 @@
         <testsuite name="style">
             <directory>tests/StyleTest.php</directory>
             <directory>tests/StyleMessageTest.php</directory>
+            <directory>tests/AdditionalTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>
