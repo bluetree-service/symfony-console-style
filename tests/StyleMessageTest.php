@@ -50,6 +50,24 @@ class StyleMessageTest extends TestCase
         $this->assertEquals($this->getDisplay(), "[ INFO ]     Info message\n");
     }
 
+    public function testToggleTimer(): void
+    {
+        $this->style->toggleShowTimer();
+
+        $this->assertTrue($this->style->isTimerOn());
+    }
+
+    public function testDateFormatting(): void
+    {
+        $this->assertEquals('c', $this->style->getDateTimeFormat());
+        $this->assertNull($this->style->setDateTimeFormat('d-m-Y'));
+        $this->assertEquals('d-m-Y', $this->style->getDateTimeFormat());
+
+        $this->assertEquals(14, $this->style->getTimeCharLength());
+        $this->assertInstanceOf(Style::class, $this->style->setTimeCharLength(1));
+        $this->assertEquals(1, $this->style->getTimeCharLength());
+    }
+
     public function testWarningMessageWithTimer(): void
     {
         $this->style->toggleShowTimer();
