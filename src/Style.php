@@ -224,9 +224,10 @@ class Style extends SymfonyStyle
         $type = \strtoupper($type);
         $alignment = $this->align(0, $length);
         $alignmentMessage = $this->align($message, $length - (\mb_strlen($type) + 5));
-        $timer = $this->getTimer(true);
 
+        $timer = $this->getTimer(true);
         $timer ? $this->writeln($timer) : null;
+
         $this->writeln("<bg=$background>$alignment</>");
         $this->writeln("<fg=white;bg=$background>  [$type] $message$alignmentMessage</>");
         $this->writeln("<bg=$background>$alignment</>");

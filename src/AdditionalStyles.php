@@ -239,7 +239,13 @@ trait AdditionalStyles
     }
 
     /**
-     * @param mixed $string
+     * add some spaces after string depends of it length
+     * $string can be numeric/string/array, depends of type it work different
+     * if its int inform about string length
+     * if its string or object (__toString) it calculate string length for alignment
+     * if its array, sum all strings in array length nad add +1for delimiter
+     * 
+     * @param int|string|array|object $string
      * @param int $align
      * @return string
      */
@@ -248,7 +254,7 @@ trait AdditionalStyles
         $strLength = 0;
 
         switch (true) {
-            case \is_numeric($string):
+            case \is_int($string):
                 $strLength = $string;
                 break;
 
@@ -258,7 +264,7 @@ trait AdditionalStyles
 
             case \is_array($string):
                 foreach ($string as $message) {
-                    $strLength += \mb_strlen($message);
+                    $strLength += \mb_strlen($message) +1;
                 }
                 break;
 
