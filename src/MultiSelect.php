@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: chajr
- * Date: 15.05.18
- * Time: 20:33
- */
+
+declare(strict_types=1);
 
 namespace BlueConsole;
 
@@ -61,7 +57,7 @@ class MultiSelect
     public function __construct(SymfonyStyle $output)
     {
         $this->output = $output;
-        $this->stdin = fopen('php://stdin', 'rb');
+        $this->stdin = \fopen('php://stdin', 'rb');
         system('stty cbreak -echo');
     }
 
@@ -69,7 +65,7 @@ class MultiSelect
      * @param bool $showInfo
      * @return $this
      */
-    public function toggleShowInfo(bool $showInfo) : self
+    public function toggleShowInfo(bool $showInfo): self
     {
         $this->showInfo = $showInfo;
 
@@ -80,7 +76,7 @@ class MultiSelect
      * @param string $char
      * @return $this
      */
-    public function setSelectChar(string $char) : self
+    public function setSelectChar(string $char): self
     {
         $this->selectChar = $char;
 
@@ -91,7 +87,7 @@ class MultiSelect
      * @param string $char
      * @return $this
      */
-    public function setSelectedChar(string $char) : self
+    public function setSelectedChar(string $char): self
     {
         $this->selectedChar = $char;
 
@@ -102,7 +98,7 @@ class MultiSelect
      * @param array $dataList
      * @return array
      */
-    public function renderMultiSelect(array $dataList) : array
+    public function renderMultiSelect(array $dataList): array
     {
         $selectedOptions = [];
         $cursor = 0;
@@ -111,7 +107,7 @@ class MultiSelect
         $this->renderBasicList($dataList);
 
         while (true) {
-            $char = \ord(fgetc($this->stdin));
+            $char = \ord(\fgetc($this->stdin));
 
             if (!\in_array($char, self::CHARS, true)) {
                 continue;
@@ -131,7 +127,7 @@ class MultiSelect
 
             $this->renderListWithSelection($dataList, $cursor, $selectedOptions);
 
-            sleep(.5);
+            \sleep(.5);
         }
 
         return $selectedOptions;
@@ -141,7 +137,7 @@ class MultiSelect
      * @param array $dataList
      * @return null|int
      */
-    public function renderSingleSelect(array $dataList) :? int
+    public function renderSingleSelect(array $dataList): ?int
     {
         $selectedOptions = [];
         $cursor = 0;
@@ -150,7 +146,7 @@ class MultiSelect
         $this->renderBasicList($dataList);
 
         while (true) {
-            $char = \ord(fgetc($this->stdin));
+            $char = \ord(\fgetc($this->stdin));
 
             if (!\in_array($char, self::CHARS, true)) {
                 continue;
@@ -170,11 +166,11 @@ class MultiSelect
 
             $this->renderListWithSelection($dataList, $cursor, $selectedOptions);
 
-            sleep(.5);
+            \sleep(.5);
         }
 
-        $keys = array_keys($selectedOptions);
-        return reset($keys);
+        $keys = \array_keys($selectedOptions);
+        return \reset($keys);
     }
 
     /**
@@ -191,12 +187,12 @@ class MultiSelect
         int $listSize,
         array $selectedOptions,
         bool $isSingleSelect = false
-    ) : array {
+    ): array {
         if ($cursor > 0 && $char === self::CHARS['key_up']) {
             $cursor--;
         }
 
-        if ($cursor < $listSize -1 && $char === self::CHARS['key_down']) {
+        if ($cursor < $listSize - 1 && $char === self::CHARS['key_down']) {
             $cursor++;
         }
 
@@ -219,7 +215,7 @@ class MultiSelect
      * @param array $selectedOptions
      * @return array
      */
-    protected function singleSelection(bool $isSingleSelect, int $cursor, array $selectedOptions) : array
+    protected function singleSelection(bool $isSingleSelect, int $cursor, array $selectedOptions): array
     {
         $oldSelections = false;
 
@@ -239,7 +235,7 @@ class MultiSelect
      * @param array $selectedOptions
      * @return MultiSelect
      */
-    protected function renderSelectionInfo(array $dataList, $selectedOptions) : self
+    protected function renderSelectionInfo(array $dataList, $selectedOptions): self
     {
         if (!$this->showInfo) {
             return $this;
@@ -265,7 +261,7 @@ class MultiSelect
      * @param $selectedOptions
      * @return MultiSelect
      */
-    protected function renderListWithSelection(array $dataList, $cursor, $selectedOptions) : self
+    protected function renderListWithSelection(array $dataList, $cursor, $selectedOptions): self
     {
         foreach ($dataList as $key => $row) {
             $cursorChar = ' ';
@@ -300,7 +296,7 @@ class MultiSelect
      * @param array $dataList
      * @return MultiSelect
      */
-    protected function renderBasicList(array $dataList) : self
+    protected function renderBasicList(array $dataList): self
     {
         $count = 0;
 
