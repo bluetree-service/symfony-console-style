@@ -155,7 +155,7 @@ class MultiSelect
 
             $this->renderListWithSelection($dataList, $cursor, $selectedOptions);
 
-            \sleep(.5);
+            \usleep(500000);
         }
 
         return $selectedOptions;
