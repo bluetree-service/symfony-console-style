@@ -20,9 +20,9 @@ class StyleTest extends TestCase
 
     public function setUp(): void
     {
-        $input = new ArgvInput;
+        $input = new ArgvInput();
         $this->output = new StreamOutput(fopen('php://memory', 'w+', false));
-        $formatter = new FormatterHelper;
+        $formatter = new FormatterHelper();
         $this->style = new Style($input, $this->output, $formatter);
     }
 

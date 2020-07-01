@@ -19,7 +19,7 @@ trait AdditionalStyles
     protected $timeCharLength = 14;
 
     /**
-     * @var int
+     * @var int|float
      */
     protected $time;
 
@@ -137,7 +137,7 @@ trait AdditionalStyles
      * @return string|null
      * @throws \Exception
      */
-    protected function getTimer(bool $checkEnableForBlock = false):? string
+    protected function getTimer(bool $checkEnableForBlock = false): ?string
     {
         if ($checkEnableForBlock && !$this->showTimer) {
             return null;
@@ -156,7 +156,7 @@ trait AdditionalStyles
      */
     protected function getTimerDateTime(): string
     {
-        $dateTime = (new \DateTime)->format($this->dateTimeFormat);
+        $dateTime = (new \DateTime())->format($this->dateTimeFormat);
 
         return "[ <options=bold>$dateTime</> ]";
     }
@@ -204,7 +204,7 @@ trait AdditionalStyles
      * @param int $align
      * @return $this
      */
-    public function setAlign($align): self
+    public function setAlign(int $align): self
     {
         $this->align = $align;
 
@@ -244,7 +244,7 @@ trait AdditionalStyles
      * if its int inform about string length
      * if its string or object (__toString) it calculate string length for alignment
      * if its array, sum all strings in array length nad add +1for delimiter
-     * 
+     *
      * @param int|string|array|object $string
      * @param int $align
      * @return string
@@ -264,7 +264,7 @@ trait AdditionalStyles
 
             case \is_array($string):
                 foreach ($string as $message) {
-                    $strLength += \mb_strlen($message) +1;
+                    $strLength += \mb_strlen($message) + 1;
                 }
                 break;
 

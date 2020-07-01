@@ -100,37 +100,7 @@ class MultiSelect
      */
     public function renderMultiSelect(array $dataList): array
     {
-        $selectedOptions = [];
-        $cursor = 0;
-        $listSize = \count($dataList);
-
-        $this->renderBasicList($dataList);
-
-        while (true) {
-            $char = \ord(\fgetc($this->stdin));
-
-            if (!\in_array($char, self::CHARS, true)) {
-                continue;
-            }
-
-            if ($char === self::CHARS['enter']) {
-                $this->renderSelectionInfo($dataList, $selectedOptions);
-
-                break;
-            }
-
-            for ($i = 0; $i < $listSize; $i++) {
-                echo self::MOD_LINE_CHAR;
-            }
-
-            [$cursor, $selectedOptions] = $this->manageCursor($cursor, $char, $listSize, $selectedOptions);
-
-            $this->renderListWithSelection($dataList, $cursor, $selectedOptions);
-
-            \sleep(.5);
-        }
-
-        return $selectedOptions;
+        return $this->renderList($dataList, false);
     }
 
     /**
@@ -138,6 +108,19 @@ class MultiSelect
      * @return null|int
      */
     public function renderSingleSelect(array $dataList): ?int
+    {
+        $selectedOptions = $this->renderList($dataList, true);
+
+        $keys = \array_keys($selectedOptions);
+        return \reset($keys);
+    }
+
+    /**
+     * @param array $dataList
+     * @param bool $isSingleSelect
+     * @return array
+     */
+    protected function renderList(array $dataList, bool $isSingleSelect): array
     {
         $selectedOptions = [];
         $cursor = 0;
@@ -162,15 +145,20 @@ class MultiSelect
                 echo self::MOD_LINE_CHAR;
             }
 
-            [$cursor, $selectedOptions] = $this->manageCursor($cursor, $char, $listSize, $selectedOptions, true);
+            [$cursor, $selectedOptions] = $this->manageCursor(
+                $cursor,
+                $char,
+                $listSize,
+                $selectedOptions,
+                $isSingleSelect
+            );
 
             $this->renderListWithSelection($dataList, $cursor, $selectedOptions);
 
             \sleep(.5);
         }
 
-        $keys = \array_keys($selectedOptions);
-        return \reset($keys);
+        return $selectedOptions;
     }
 
     /**
@@ -235,7 +223,7 @@ class MultiSelect
      * @param array $selectedOptions
      * @return MultiSelect
      */
-    protected function renderSelectionInfo(array $dataList, $selectedOptions): self
+    protected function renderSelectionInfo(array $dataList, array $selectedOptions): self
     {
         if (!$this->showInfo) {
             return $this;
@@ -257,11 +245,11 @@ class MultiSelect
 
     /**
      * @param array $dataList
-     * @param $cursor
-     * @param $selectedOptions
+     * @param int $cursor
+     * @param array $selectedOptions
      * @return MultiSelect
      */
-    protected function renderListWithSelection(array $dataList, $cursor, $selectedOptions): self
+    protected function renderListWithSelection(array $dataList, int $cursor, array $selectedOptions): self
     {
         foreach ($dataList as $key => $row) {
             $cursorChar = ' ';

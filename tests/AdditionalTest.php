@@ -20,9 +20,9 @@ class AdditionalTest extends TestCase
 
     public function setUp(): void
     {
-        $input = new ArgvInput;
-        $this->output = new StreamOutput(fopen('php://memory', 'w+', false));
-        $formatter = new FormatterHelper;
+        $input = new ArgvInput();
+        $this->output = new StreamOutput(\fopen('php://memory', 'wb+', false));
+        $formatter = new FormatterHelper();
         $this->style = new Style($input, $this->output, $formatter);
     }
 
@@ -82,6 +82,10 @@ class AdditionalTest extends TestCase
             [
                 'string' => ['123', '456'],
                 'expect' => '        ',
+            ],
+            [
+                'string' => null,
+                'expect' => '                ',
             ],
         ];
     }
