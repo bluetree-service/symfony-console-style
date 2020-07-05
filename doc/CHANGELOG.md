@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## 0.5.0.0 - 2020-07-
+## 0.5.0.0 - 2020-07-05
 ### Added
 * Message timer with date time
 * Style tests
