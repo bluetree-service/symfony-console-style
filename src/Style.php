@@ -10,7 +10,7 @@ class Style extends SymfonyStyle
 {
     use AdditionalStyles;
 
-    public const DAY_SECCONDS = 86400;
+    public const DAY_SECONDS = 86400;
 
     /**
      * @param bool $newLine

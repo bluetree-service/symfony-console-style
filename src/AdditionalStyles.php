@@ -189,9 +189,9 @@ trait AdditionalStyles
         $current = \microtime(true);
         $calc = $current - $this->time;
 
-        if ($calc > self::DAY_SECCONDS) {
-            $days = \round($calc / self::DAY_SECCONDS);
-            $calc -= self::DAY_SECCONDS * $days;
+        if ($calc > self::DAY_SECONDS) {
+            $days = \round($calc / self::DAY_SECONDS);
+            $calc -= self::DAY_SECONDS * $days;
             $days .= 'd ';
 
             $this->timeCharLength -= \strlen($days);
@@ -225,7 +225,7 @@ trait AdditionalStyles
      * @param int $align
      * @return $this
      */
-    public function setTimeCharLength($align): self
+    public function setTimeCharLength(int $align): self
     {
         $this->timeCharLength = $align;
 
@@ -251,7 +251,7 @@ trait AdditionalStyles
      * @param int $align
      * @return string
      */
-    public function align($string, $align): string
+    public function align($string, int $align): string
     {
         $strLength = 0;
 
