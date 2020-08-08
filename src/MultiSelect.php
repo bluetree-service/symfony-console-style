@@ -129,6 +129,10 @@ class MultiSelect
         $this->renderBasicList($dataList);
 
         while (true) {
+            if (!$this->stdin) {
+                continue;
+            }
+
             $char = \ord(\fgetc($this->stdin));
 
             if (!\in_array($char, self::CHARS, true)) {

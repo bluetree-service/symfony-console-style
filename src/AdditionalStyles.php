@@ -127,7 +127,8 @@ trait AdditionalStyles
      */
     public function startTime(?int $time = null): void
     {
-        if (!$time) {
+        if ($time === null) {
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $time = \microtime(true);
         }
 
@@ -189,9 +190,9 @@ trait AdditionalStyles
         $current = \microtime(true);
         $calc = $current - $this->time;
 
-        if ($calc > self::DAY_SECONDS) {
-            $days = \round($calc / self::DAY_SECONDS);
-            $calc -= self::DAY_SECONDS * $days;
+        if ($calc > Style::DAY_SECONDS) {
+            $days = \round($calc / Style::DAY_SECONDS);
+            $calc -= Style::DAY_SECONDS * $days;
             $days .= 'd ';
 
             $this->timeCharLength -= \strlen($days);
@@ -250,6 +251,7 @@ trait AdditionalStyles
      * @param int|string|array|object $string
      * @param int $align
      * @return string
+     * @noinspection MissingParameterTypeDeclarationInspection
      */
     public function align($string, int $align): string
     {

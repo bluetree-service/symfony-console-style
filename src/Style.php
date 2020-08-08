@@ -58,6 +58,7 @@ class Style extends SymfonyStyle
      * @return $this
      * @throws \Exception
      * @throws \InvalidArgumentException
+     * @noinspection MissingParameterTypeDeclarationInspection
      */
     public function formatBlock($messages, string $style, bool $large = false): self
     {
@@ -236,6 +237,11 @@ class Style extends SymfonyStyle
         $this->newLine();
 
         return $this;
+    }
+
+    public function floatingProgressBar(): void
+    {
+        
     }
 
     public function longRunCommand(string $command): void
