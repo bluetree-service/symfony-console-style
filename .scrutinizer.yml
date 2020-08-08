@@ -1,3 +1,7 @@
+checks:
+    php:
+        code_rating: true
+        duplication: true
 build:
     nodes:
         php72:
@@ -9,6 +13,11 @@ build:
         php74:
             environment:
                 php: 7.4
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
+        test: true
     tests:
         override:
             -
