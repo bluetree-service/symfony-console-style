@@ -30,7 +30,7 @@ Extended Symfony Console styles. Including new blocks, message time, interactive
 Documentation & Examples
 ------------------------
 * [Multi select](https://github.com/bluetree-service/symfony-console-style/tree/examples/multiselect.php "Multi select")
-* [Single select](https://github.com/bluetree-service/symfony-console-style/tree/develop/singleselect.pl "Single select")
+* [Single select](https://github.com/bluetree-service/symfony-console-style/tree/develop/singleselect.php "Single select")
 * [Extended styles](https://github.com/bluetree-service/symfony-console-style/tree/develop/style.php "Extended styles")
 
 
