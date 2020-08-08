@@ -12,7 +12,7 @@ jobs:
             - image: circleci/php:7.2
         steps:
             - checkout
-            - run: vendor/bin/phpunit
+            - run: ./vendor/bin/phpunit
 
 workflows:
     version: 2
