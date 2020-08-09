@@ -3,7 +3,7 @@
     "description": "Extends symfony console display style",
     "type": "library",
     "license": "MIT",
-    "version": "0.4.0.0",
+    "version": "0.6.0.0",
     "authors": [
         {
             "name": "Michał Adamiak",
