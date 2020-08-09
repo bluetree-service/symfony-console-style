@@ -1,6 +1,18 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.6.0.0 - 2020-08-09
+### Added
+* An added helper to run commands in multiple processes
+* Styles for multiple process progress bar
+* Floating progress bar
+* Multi line block
+* Circle CI configuration
+* README description
+### Changed
+* PSR-12 fixes
+* Fixes from CI/CD services
+
 ## 0.5.0.0 - 2020-07-05
 ### Added
 * Message timer with date time
