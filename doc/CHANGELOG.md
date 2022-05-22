@@ -1,7 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## 0.6.0.0 - 2020-08-09
+## 0.6.1.0 - 2022-05-22
+### Changed
+* List rendering timeout changed from 0.5s to 0.1s
+
+**## 0.6.0.0 - 2020-08-09
 ### Added
 * An added helper to run commands in multiple processes
 * Styles for multiple process progress bar
@@ -11,7 +15,7 @@ All notable changes to this project will be documented in this file.
 * README description
 ### Changed
 * PSR-12 fixes
-* Fixes from CI/CD services
+* Fixes from CI/CD services**
 
 ## 0.5.0.0 - 2020-07-05
 ### Added
