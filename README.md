@@ -6,9 +6,9 @@ Bluetree Symfony Console Styles Extender
 [![License](https://poser.pugx.org/bluetree-service/symfony-console-style/license.svg?style=flat-square)](https://packagist.org/packages/bluetree-service/symfony-console-style)
 
 ##### Builds
-| Travis | Scrutinizer |
-|:---:|:---:|
-| [![Build Status](https://travis-ci.org/bluetree-service/symfony-console-style.svg?style=flat-square)](https://travis-ci.org/bluetree-service/symfony-console-style) | [![Build Status](https://scrutinizer-ci.com/g/bluetree-service/symfony-console-style/badges/build.png?style=flat-square&b=master)](https://scrutinizer-ci.com/g/bluetree-service/symfony-console-style/build-status/master) |
+| Travis | Scrutinizer | Circle-CI |
+|:---:|:---:|:---:|
+| [![Build Status](https://travis-ci.org/bluetree-service/symfony-console-style.svg?style=flat-square)](https://travis-ci.org/bluetree-service/symfony-console-style) | [![Build Status](https://scrutinizer-ci.com/g/bluetree-service/symfony-console-style/badges/build.png?style=flat-square&b=master)](https://scrutinizer-ci.com/g/bluetree-service/symfony-console-style/build-status/master) | [![<Bluetree Service>](https://circleci.com/gh/bluetree-service/symfony-console-style.svg?style=shield)](https://app.circleci.com/pipelines/github/bluetree-service/symfony-console-style) |
 
 ##### Coverage
 | Coveralls | Scrutinizer |

@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.6.1.1 - 2022-07-03
+### Added
+* Circle-CI badge
+### Changed
+* Fixed composer.json version
+
 ## 0.6.1.0 - 2022-05-22
 ### Changed
 * List rendering timeout changed from 0.5s to 0.1s
