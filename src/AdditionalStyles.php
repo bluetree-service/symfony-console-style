@@ -13,37 +13,37 @@ trait AdditionalStyles
     /**
      * @var int
      */
-    protected $align = 12;
+    protected int $align = 12;
 
     /**
      * @var int
      */
-    protected $timeCharLength = 14;
+    protected int $timeCharLength = 14;
 
     /**
      * @var int|float
      */
-    protected $time;
+    protected int|float $time;
 
     /**
      * @var bool
      */
-    protected $showTimer = false;
+    protected bool $showTimer = false;
 
     /**
      * @var bool
      */
-    protected $timerTypeDateTime = false;
+    protected bool $timerTypeDateTime = false;
 
     /**
      * @var FormatterHelper
      */
-    protected $formatter;
+    protected FormatterHelper $formatter;
 
     /**
      * @var string
      */
-    protected $dateTimeFormat = 'c';
+    protected string $dateTimeFormat = 'c';
 
     /**
      * Style constructor.
@@ -65,7 +65,7 @@ trait AdditionalStyles
      * @param string $message
      * @param int $length
      * @param string $suffix
-     * @return Style
+     * @return AdditionalStyles|Style
      */
     public function truncate(string $message, int $length, string $suffix = '...'): self
     {
@@ -78,7 +78,7 @@ trait AdditionalStyles
      * @param string $message
      * @param int $length
      * @param string $suffix
-     * @return Style
+     * @return AdditionalStyles|Style
      */
     public function truncateLn(string $message, int $length, string $suffix = '...'): self
     {
@@ -198,14 +198,14 @@ trait AdditionalStyles
             $this->timeCharLength -= \strlen($days);
         }
 
-        $formatted = \sprintf("%0{$this->timeCharLength}.4f", $calc);
+        $formatted = \sprintf("%0$this->timeCharLength.4f", $calc);
 
         return "[ <options=bold>$days$formatted</> ]";
     }
 
     /**
      * @param int $align
-     * @return $this
+     * @return AdditionalStyles|Style
      */
     public function setAlign(int $align): self
     {
@@ -224,7 +224,7 @@ trait AdditionalStyles
 
     /**
      * @param int $align
-     * @return $this
+     * @return AdditionalStyles|Style
      */
     public function setTimeCharLength(int $align): self
     {
@@ -248,12 +248,11 @@ trait AdditionalStyles
      * if its string or object (__toString) it calculate string length for alignment
      * if its array, sum all strings in array length nad add +1for delimiter
      *
-     * @param int|string|array|object $string
+     * @param mixed $string
      * @param int $align
      * @return string
-     * @noinspection MissingParameterTypeDeclarationInspection
      */
-    public function align($string, int $align): string
+    public function align(mixed $string, int $align): string
     {
         $strLength = 0;
 

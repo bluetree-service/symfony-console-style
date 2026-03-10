@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<phpunit bootstrap="vendor/autoload.php" colors="true">
-    <testsuites>
-        <testsuite name="style">
-            <directory>tests/StyleTest.php</directory>
-            <directory>tests/StyleMessageTest.php</directory>
-            <directory>tests/AdditionalTest.php</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+<phpunit bootstrap="vendor/autoload.php" colors="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnPhpunitDeprecations="true"
+>    <testsuites>
+    <testsuite name="console-style">
+        <directory>tests</directory>
+    </testsuite>
+</testsuites>
+    <source>
+        <include>
             <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </source>
 </phpunit>

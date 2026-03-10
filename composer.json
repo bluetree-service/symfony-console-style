@@ -3,7 +3,6 @@
     "description": "Extends symfony console display style",
     "type": "library",
     "license": "MIT",
-    "version": "0.6.1.1",
     "authors": [
         {
             "name": "Michał Adamiak",
@@ -11,14 +10,8 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
-        "symfony/console": "3.4.*|~4.0"
-    },
-    "require-dev": {
-        "satooshi/php-coveralls": "1.0.*",
-        "symfony/var-dumper": "^4.1",
-        "bluetree-service/clover-reporter": "~0.1",
-        "phpunit/phpunit": "^8.4"
+        "php": "^8.2",
+        "symfony/console": "^7.4|^8.0"
     },
     "autoload": {
         "psr-4": {
@@ -31,14 +24,18 @@
         }
     },
     "scripts": {
-        "test": "phpunit --coverage-clover build/logs/clover.xml",
-        "test-cover": [
-            "@test",
-            "./vendor/bin/clover_reporter -s --ansi"
-        ],
-        "test-cover-short": [
-            "@test",
-            "./vendor/bin/clover_reporter -c --ansi"
+        "test": "./vendor/bin/phpunit --display-warnings",
+        "coverage": "./vendor/bin/phpunit --display-warnings --coverage-clover build/logs/clover.xml",
+        "clover-report": "./vendor/bin/clover_reporter -c build/logs/clover.xml",
+        "clover-full": "./vendor/bin/clover_reporter -f build/logs/clover.xml",
+        "clover-html": "./vendor/bin/clover_reporter -P ./build/report.html -f -H build/logs/clover.xml",
+        "test-complete": [
+            "@coverage",
+            "@clover-html"
         ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5",
+        "bluetree-service/clover-reporter": "^0.3.2"
     }
 }

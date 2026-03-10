@@ -58,9 +58,8 @@ class Style extends SymfonyStyle
      * @return $this
      * @throws \Exception
      * @throws \InvalidArgumentException
-     * @noinspection MissingParameterTypeDeclarationInspection
      */
-    public function formatBlock($messages, string $style, bool $large = false): self
+    public function formatBlock(string|array $messages, string $style, bool $large = false): self
     {
         $timer = $this->getTimer(true);
 
@@ -93,9 +92,8 @@ class Style extends SymfonyStyle
     }
 
     /**
-     * @param $message
+     * @param string $message
      * @return $this
-     * @throws \InvalidArgumentException
      * @throws \Exception
      */
     public function okMessage(string $message): self
@@ -104,9 +102,8 @@ class Style extends SymfonyStyle
     }
 
     /**
-     * @param $message
+     * @param string $message
      * @return $this
-     * @throws \InvalidArgumentException
      * @throws \Exception
      */
     public function errorMessage(string $message): self
@@ -156,57 +153,52 @@ class Style extends SymfonyStyle
 
     /**
      * @param string $message
-     * @return $this
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function note($message): self
+    public function note($message): void
     {
-        return $this->genericBlock($message, 'blue', 'note');
+        $this->genericBlock($message, 'blue', 'note');
     }
 
     /**
      * @param string $message
-     * @return $this
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function caution($message): self
+    public function caution($message): void
     {
-        return $this->genericBlock($message, 'magenta', 'caution');
+        $this->genericBlock($message, 'magenta', 'caution');
     }
 
     /**
      * @param string $message
-     * @return $this
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function success($message): self
+    public function success($message): void
     {
-        return $this->genericBlock($message, 'green', 'success');
+        $this->genericBlock($message, 'green', 'success');
     }
 
     /**
      * @param string $message
-     * @return $this
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function warning($message): self
+    public function warning($message): void
     {
-        return $this->genericBlock($message, 'yellow', 'warning');
+        $this->genericBlock($message, 'yellow', 'warning');
     }
 
     /**
      * @param string $message
-     * @return $this
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function error($message): self
+    public function error($message): void
     {
-        return $this->genericBlock($message, 'red', 'error');
+        $this->genericBlock($message, 'red', 'error');
     }
 
     /**

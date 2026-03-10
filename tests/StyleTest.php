@@ -29,10 +29,10 @@ class StyleTest extends TestCase
     public function testTimer(): void
     {
         $this->style->timer();
-        $this->assertRegExp('/\[ 000000000.00[\d]{2} \]/', $this->getDisplay());
+        $this->assertMatchesRegularExpression('/\[ 000000000.00[\d]{2} \]/', $this->getDisplay());
 
         $this->style->timer(true);
-        $this->assertRegExp('/\[ 000000000.00[\d]{2} \]\n/', $this->getDisplay());
+        $this->assertMatchesRegularExpression('/\[ 000000000.00[\d]{2} \]\n/', $this->getDisplay());
     }
 
     public function testFormatSection(): void

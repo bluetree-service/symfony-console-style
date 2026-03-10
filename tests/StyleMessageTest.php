@@ -73,7 +73,7 @@ class StyleMessageTest extends TestCase
         $this->style->toggleShowTimer();
         $this->style->warningMessage('Warning message');
 
-        $this->assertRegExp($this->getMessageExpression('warning'), $this->getDisplay());
+        $this->assertMatchesRegularExpression($this->getMessageExpression('warning'), $this->getDisplay());
     }
 
     public function testOkMessageWithTimer(): void
@@ -81,7 +81,7 @@ class StyleMessageTest extends TestCase
         $this->style->toggleShowTimer();
         $this->style->okMessage('Ok message');
 
-        $this->assertRegExp($this->getMessageExpression('ok'), $this->getDisplay());
+        $this->assertMatchesRegularExpression($this->getMessageExpression('ok'), $this->getDisplay());
     }
 
     public function testErrorMessageWithTimer(): void
@@ -89,7 +89,7 @@ class StyleMessageTest extends TestCase
         $this->style->toggleShowTimer();
         $this->style->errorMessage('Error message');
 
-        $this->assertRegExp($this->getMessageExpression('error'), $this->getDisplay());
+        $this->assertMatchesRegularExpression($this->getMessageExpression('error'), $this->getDisplay());
     }
 
     public function testInfoMessageWithTimer(): void
@@ -97,7 +97,7 @@ class StyleMessageTest extends TestCase
         $this->style->toggleShowTimer();
         $this->style->infoMessage('Info message');
 
-        $this->assertRegExp($this->getMessageExpression('info'), $this->getDisplay());
+        $this->assertMatchesRegularExpression($this->getMessageExpression('info'), $this->getDisplay());
     }
 
     public function testWarningMessageWithDateTime(): void
@@ -106,7 +106,7 @@ class StyleMessageTest extends TestCase
         $this->style->toggleTimerType();
         $this->style->warningMessage('Warning message');
 
-        $this->assertRegExp($this->getMessageExpression('warning', true), $this->getDisplay());
+        $this->assertMatchesRegularExpression($this->getMessageExpression('warning', true), $this->getDisplay());
     }
 
     public function testOkMessageWithDateTime(): void
@@ -115,7 +115,7 @@ class StyleMessageTest extends TestCase
         $this->style->toggleTimerType();
         $this->style->okMessage('Ok message');
 
-        $this->assertRegExp($this->getMessageExpression('ok', true), $this->getDisplay());
+        $this->assertMatchesRegularExpression($this->getMessageExpression('ok', true), $this->getDisplay());
     }
 
     public function testErrorMessageWithDateTime(): void
@@ -124,7 +124,7 @@ class StyleMessageTest extends TestCase
         $this->style->toggleTimerType();
         $this->style->errorMessage('Error message');
 
-        $this->assertRegExp($this->getMessageExpression('error', true), $this->getDisplay());
+        $this->assertMatchesRegularExpression($this->getMessageExpression('error', true), $this->getDisplay());
     }
 
     public function testInfoMessageWithDateTime(): void
@@ -133,7 +133,7 @@ class StyleMessageTest extends TestCase
         $this->style->toggleTimerType();
         $this->style->infoMessage('Info message');
 
-        $this->assertRegExp($this->getMessageExpression('info', true), $this->getDisplay());
+        $this->assertMatchesRegularExpression($this->getMessageExpression('info', true), $this->getDisplay());
     }
 
     /**

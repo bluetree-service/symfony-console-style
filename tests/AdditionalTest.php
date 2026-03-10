@@ -8,6 +8,7 @@ use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Tester\TesterTrait;
 use BlueConsole\Style;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AdditionalTest extends TestCase
 {
@@ -16,7 +17,7 @@ class AdditionalTest extends TestCase
     /**
      * @var Style
      */
-    protected $style;
+    protected Style $style;
 
     public function setUp(): void
     {
@@ -60,15 +61,13 @@ class AdditionalTest extends TestCase
         $this->assertEquals(100, $this->style->getAlign());
     }
 
-    /**
-     * @dataProvider alignDataProvider
-     */
+    #[DataProvider('alignDataProvider')]
     public function testAlign($string, $expect): void
     {
         $this->assertEquals($expect, $this->style->align($string, 15));
     }
 
-    public function alignDataProvider(): array
+    public static function alignDataProvider(): array
     {
         return [
             [

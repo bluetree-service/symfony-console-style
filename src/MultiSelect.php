@@ -29,22 +29,22 @@ class MultiSelect
     /**
      * @var string
      */
-    protected $selectChar = '<fg=blue>❯</>';
+    protected string $selectChar = '<fg=blue>❯</>';
 
     /**
      * @var string
      */
-    protected $selectedChar = '<info>✓</info>';
+    protected string $selectedChar = '<info>✓</info>';
 
     /**
      * @var SymfonyStyle $output
      */
-    protected $output;
+    protected SymfonyStyle $output;
 
     /**
      * @var bool
      */
-    protected $showInfo = true;
+    protected bool $showInfo = true;
 
     /**
      * @var bool|resource
@@ -52,7 +52,7 @@ class MultiSelect
     protected $stdin;
 
     /**
-     * @param $output
+     * @param SymfonyStyle $output
      */
     public function __construct(SymfonyStyle $output)
     {
