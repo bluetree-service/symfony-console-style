@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BlueConsole;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Terminal;
 
 class MultiSelect
 {
@@ -12,7 +13,6 @@ class MultiSelect
      * @todo add help bellow (move up, down, space enter)
      * @todo add separators
      * @todo count line length and select highest value to replace all chars
-     * @todo option scroll
      * @todo separator (---- by default, optionally message)
      * @todo comments on array list
      * @todo use different select char & brackets for single select
@@ -37,6 +37,21 @@ class MultiSelect
     protected string $selectedChar = '<info>✓</info>';
 
     /**
+     * @var string
+     */
+    protected string $lockedChar = '<fg=gray>●</>';
+
+    /**
+     * @var null|int null = terminal height
+     */
+    protected ?int $pageSize = null;
+
+    /**
+     * @var int first visible row
+     */
+    protected int $offset = 0;
+
+    /**
      * @var SymfonyStyle $output
      */
     protected SymfonyStyle $output;
@@ -53,12 +68,17 @@ class MultiSelect
 
     /**
      * @param SymfonyStyle $output
+     * @param null|resource $stdin custom input stream (tests), terminal mode is not changed then
      */
-    public function __construct(SymfonyStyle $output)
+    public function __construct(SymfonyStyle $output, $stdin = null)
     {
         $this->output = $output;
-        $this->stdin = \fopen('php://stdin', 'rb');
-        system('stty cbreak -echo');
+        $this->stdin = $stdin;
+
+        if ($stdin === null) {
+            $this->stdin = \fopen('php://stdin', 'rb');
+            system('stty cbreak -echo');
+        }
     }
 
     /**
@@ -95,12 +115,36 @@ class MultiSelect
     }
 
     /**
-     * @param array $dataList
-     * @return array
+     * @param string $char
+     * @return $this
      */
-    public function renderMultiSelect(array $dataList): array
+    public function setLockedChar(string $char): self
     {
-        return $this->renderList($dataList, false);
+        $this->lockedChar = $char;
+
+        return $this;
+    }
+
+    /**
+     * @param null|int $pageSize visible rows, longer list scrolls; null = terminal height
+     * @return $this
+     */
+    public function setPageSize(?int $pageSize): self
+    {
+        $this->pageSize = $pageSize;
+
+        return $this;
+    }
+
+    /**
+     * @param array $dataList
+     * @param int[] $selected keys selected at start
+     * @param int[] $locked keys selected at start which can't be unselected
+     * @return array selected keys (with locked) as [key => true]
+     */
+    public function renderMultiSelect(array $dataList, array $selected = [], array $locked = []): array
+    {
+        return $this->renderList($dataList, false, $selected, $locked);
     }
 
     /**
@@ -118,22 +162,32 @@ class MultiSelect
     /**
      * @param array $dataList
      * @param bool $isSingleSelect
+     * @param int[] $selected
+     * @param int[] $locked
      * @return array
      */
-    protected function renderList(array $dataList, bool $isSingleSelect): array
-    {
-        $selectedOptions = [];
+    protected function renderList(
+        array $dataList,
+        bool $isSingleSelect,
+        array $selected = [],
+        array $locked = []
+    ): array {
+        $locked = \array_fill_keys($locked, true);
+        $selectedOptions = \array_fill_keys($selected, true) + $locked;
         $cursor = 0;
         $listSize = \count($dataList);
+        $this->offset = 0;
 
-        $this->renderBasicList($dataList);
+        $lines = $this->renderListWithSelection($dataList, $cursor, $selectedOptions, $locked);
 
         while (true) {
-            if (!$this->stdin) {
-                continue;
+            $read = \fgetc($this->stdin);
+
+            if ($read === false) {
+                break;
             }
 
-            $char = \ord(\fgetc($this->stdin));
+            $char = \ord($read);
 
             if (!\in_array($char, self::CHARS, true)) {
                 continue;
@@ -145,19 +199,18 @@ class MultiSelect
                 break;
             }
 
-            for ($i = 0; $i < $listSize; $i++) {
-                echo self::MOD_LINE_CHAR;
-            }
+            echo \str_repeat(self::MOD_LINE_CHAR, $lines);
 
             [$cursor, $selectedOptions] = $this->manageCursor(
                 $cursor,
                 $char,
                 $listSize,
                 $selectedOptions,
-                $isSingleSelect
+                $isSingleSelect,
+                $locked
             );
 
-            $this->renderListWithSelection($dataList, $cursor, $selectedOptions);
+            $lines = $this->renderListWithSelection($dataList, $cursor, $selectedOptions, $locked);
 
             \usleep(100000);
         }
@@ -171,6 +224,7 @@ class MultiSelect
      * @param int $listSize
      * @param bool $isSingleSelect
      * @param array $selectedOptions
+     * @param array $locked [key => true]
      * @return array
      */
     protected function manageCursor(
@@ -178,7 +232,8 @@ class MultiSelect
         int $char,
         int $listSize,
         array $selectedOptions,
-        bool $isSingleSelect = false
+        bool $isSingleSelect = false,
+        array $locked = []
     ): array {
         if ($cursor > 0 && $char === self::CHARS['key_up']) {
             $cursor--;
@@ -188,7 +243,7 @@ class MultiSelect
             $cursor++;
         }
 
-        if ($char === self::CHARS['space']) {
+        if ($char === self::CHARS['space'] && !isset($locked[$cursor])) {
             [$selectedOptions, $oldSelections] = $this->singleSelection($isSingleSelect, $cursor, $selectedOptions);
 
             if ($oldSelections || isset($selectedOptions[$cursor])) {
@@ -251,61 +306,51 @@ class MultiSelect
      * @param array $dataList
      * @param int $cursor
      * @param array $selectedOptions
-     * @return MultiSelect
+     * @param array $locked [key => true]
+     * @return int rendered lines count
      */
-    protected function renderListWithSelection(array $dataList, int $cursor, array $selectedOptions): self
-    {
-        foreach ($dataList as $key => $row) {
-            $cursorChar = ' ';
-            $selected = '[ ]';
+    protected function renderListWithSelection(
+        array $dataList,
+        int $cursor,
+        array $selectedOptions,
+        array $locked = []
+    ): int {
+        $listSize = \count($dataList);
+        $height = \min($listSize, $this->pageSize ?? \max(5, (new Terminal())->getHeight() - 4));
 
-            if ($cursor === $key) {
-                $cursorChar = $this->selectChar;
-            }
+        if ($cursor < $this->offset) {
+            $this->offset = $cursor;
+        }
 
-            if ($cursorChar !== ' ') {
-                $selected = "<fg=blue>$selected</>";
-            }
+        if ($cursor >= $this->offset + $height) {
+            $this->offset = $cursor - $height + 1;
+        }
 
-            if (\array_key_exists($key, $selectedOptions)) {
+        foreach (\array_slice($dataList, $this->offset, $height, true) as $key => $row) {
+            $isCursor = $cursor === $key;
+            $cursorChar = $isCursor ? $this->selectChar : ' ';
+            $selected = $isCursor ? '<fg=blue>[ ]</>' : '[ ]';
+
+            if (isset($locked[$key])) {
+                $selected = '[' . $this->lockedChar . ']';
+            } elseif (\array_key_exists($key, $selectedOptions)) {
                 $selected = '[' . $this->selectedChar . ']';
             }
 
             //@todo resolve colors
-            if ($cursorChar !== ' ') {
-                $row = "<fg=blue>$row</>";
-            } else {
-                $row = "<comment>$row</comment>";
-            }
+            $row = $isCursor ? "<fg=blue>$row</>" : "<comment>$row</comment>";
 
             $this->output->writeln(" $cursorChar $selected $row");
         }
 
-        return $this;
-    }
-
-    /**
-     * @param array $dataList
-     * @return MultiSelect
-     */
-    protected function renderBasicList(array $dataList): self
-    {
-        $count = 0;
-
-        foreach ($dataList as $key => $row) {
-            $cursorChar = ' ';
-
-            if ($key === 0) {
-                $cursorChar = $this->selectChar;
-            }
-
-            if ($count++ === 0) {
-                 $this->output->writeln(" $cursorChar <fg=blue>[ ]</> <comment>$row</comment>");
-            } else {
-                $this->output->writeln(" $cursorChar [ ] <comment>$row</comment>");
-            }
+        if ($height === $listSize) {
+            return $height;
         }
 
-        return $this;
+        $this->output->writeln(
+            \sprintf(' <fg=gray>%d-%d / %d</>', $this->offset + 1, $this->offset + $height, $listSize)
+        );
+
+        return $height + 1;
     }
 }

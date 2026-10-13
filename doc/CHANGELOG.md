@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.8.0.0 - 2026-10-13
+### Added
+* `MultiSelect::renderMultiSelect()` preselected and locked (can't be unselected) keys
+* `MultiSelect::setLockedChar()` mark for locked rows
+* `MultiSelect::setPageSize()` scrolling for lists longer than terminal (terminal height by default)
+* optional input stream in `MultiSelect` constructor (tests)
+### Changed
+* list stops on input EOF instead of busy loop
+### Removed
+* `MultiSelect::renderBasicList()` (first render uses `renderListWithSelection()`)
+
 ## 0.7.0.0 - 2026-03-10
 * Composer scripts for testing
 * Makefile for easier development

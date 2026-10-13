@@ -27,5 +27,9 @@ $output->writeln('');
 $val = $multiSelect->renderMultiSelect($list);
 
 $output->writeln('');
+$output->writeln('Preselected "second", locked "first", 2 rows visible:');
+$val = $multiSelect->setPageSize(2)->renderMultiSelect($list, [1], [0]);
+
+$output->writeln('');
 $output->writeln('Method output:');
 dump($val);
