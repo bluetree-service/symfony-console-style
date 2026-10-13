@@ -43,4 +43,17 @@ class MultiSelectTest extends TestCase
 
         $this->assertSame([1], \array_keys($selected));
     }
+
+    public function testCursorOnConfirm(): void
+    {
+        $stdin = \fopen('php://memory', 'wb+');
+        \fwrite($stdin, "BB\n");
+        \rewind($stdin);
+        $select = (new MultiSelect(new SymfonyStyle(new ArgvInput([]), new BufferedOutput()), $stdin))
+            ->toggleShowInfo(false);
+
+        $select->renderMultiSelect(['a', 'b', 'c']);
+
+        $this->assertSame(2, $select->getCursor());
+    }
 }

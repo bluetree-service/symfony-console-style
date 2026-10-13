@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.8.1.0 - 2026-10-13
+### Added
+* `MultiSelect::getCursor()` row under cursor when list was confirmed
+
 ## 0.8.0.0 - 2026-10-13
 ### Added
 * `MultiSelect::renderMultiSelect()` preselected and locked (can't be unselected) keys

@@ -52,6 +52,11 @@ class MultiSelect
     protected int $offset = 0;
 
     /**
+     * @var int cursor position when list was confirmed
+     */
+    protected int $cursor = 0;
+
+    /**
      * @var SymfonyStyle $output
      */
     protected SymfonyStyle $output;
@@ -112,6 +117,14 @@ class MultiSelect
         $this->selectedChar = $char;
 
         return $this;
+    }
+
+    /**
+     * @return int row under cursor when last list was confirmed (enter)
+     */
+    public function getCursor(): int
+    {
+        return $this->cursor;
     }
 
     /**
@@ -214,6 +227,8 @@ class MultiSelect
 
             \usleep(100000);
         }
+
+        $this->cursor = $cursor;
 
         return $selectedOptions;
     }
