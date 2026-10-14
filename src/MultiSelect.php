@@ -27,6 +27,11 @@ class MultiSelect
     public const MOD_LINE_CHAR = "\033[1A";
 
     /**
+     * clears rest of line, redrawn row can be shorter than previous one
+     */
+    public const CLEAR_LINE_CHAR = "\033[K";
+
+    /**
      * @var string
      */
     protected string $selectChar = '<fg=blue>❯</>';
@@ -355,7 +360,7 @@ class MultiSelect
             //@todo resolve colors
             $row = $isCursor ? "<fg=blue>$row</>" : "<comment>$row</comment>";
 
-            $this->output->writeln(" $cursorChar $selected $row");
+            $this->output->writeln(" $cursorChar $selected $row" . self::CLEAR_LINE_CHAR);
         }
 
         if ($height === $listSize) {
@@ -363,7 +368,7 @@ class MultiSelect
         }
 
         $this->output->writeln(
-            \sprintf(' <fg=gray>%d-%d / %d</>', $this->offset + 1, $this->offset + $height, $listSize)
+            \sprintf(' <fg=gray>%d-%d / %d</>', $this->offset + 1, $this->offset + $height, $listSize) . self::CLEAR_LINE_CHAR
         );
 
         return $height + 1;

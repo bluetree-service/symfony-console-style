@@ -29,6 +29,7 @@ class MultiSelectTest extends TestCase
         $this->assertStringContainsString('1-2 / 5', $display);
         $this->assertStringContainsString('4-5 / 5', $display);
         $this->assertStringContainsString('[●] a', $display);
+        $this->assertStringContainsString("e\033[K", $display);
     }
 
     public function testUnselectPreselected(): void
